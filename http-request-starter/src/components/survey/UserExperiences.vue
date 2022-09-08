@@ -3,7 +3,9 @@
     <base-card>
       <h2>Submitted Experiences</h2>
       <div>
-        <base-button @click="loadExperiences">Load Submitted Experiences</base-button>
+        <base-button @click="loadExperiences"
+          >Load Submitted Experiences</base-button
+        >
       </div>
       <p v-show="isLoading">Loading...</p>
       <ul v-show="!isLoading">
@@ -28,30 +30,37 @@ export default {
   data() {
     return {
       results: [],
-      isLoading: false
+      isLoading: false,
     };
   },
   methods: {
     loadExperiences() {
       this.isLoading = true;
-      fetch('https://vue-http-demo-23e12-default-rtdb.firebaseio.com/surveys.json').then(function(response) {
-        if(response.ok) {
-          return response.json();
-        }
-      }).then((data) => {
-        this.isLoading = false;
-        const results = [];
-        for(const id in data) {
-          results.push({id: id, name: data[id].name, rating: data[id].rating});
-        }
-        this.results = results;
-      });
-      
+      fetch(
+        'https://vue-http-demo-23e12-default-rtdb.firebaseio.com/surveys.json'
+      )
+        .then(function (response) {
+          if (response.ok) {
+            return response.json();
+          }
+        })
+        .then((data) => {
+          this.isLoading = false;
+          const results = [];
+          for (const id in data) {
+            results.push({
+              id: id,
+              name: data[id].name,
+              rating: data[id].rating,
+            });
+          }
+          this.results = results;
+        });
     },
   },
   mounted() {
     this.loadExperiences();
-  }
+  },
 };
 </script>
 

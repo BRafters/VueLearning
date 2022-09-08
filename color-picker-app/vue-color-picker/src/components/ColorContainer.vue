@@ -5,28 +5,51 @@
             :key="color.HEX"
             :hex-value="color.HEX"
             :rgb-value="color.RGB"
+            @new-color="getOneColor"
         ></color-card>
     </div>
 </template>
 
 <script>
+const MULTI_COLOR_URL = "http://localhost:3000/colors/";
+const SINGLE_COLOR_URL = "http://localhost:3000/color";
+
 export default {
     data() {
         return {
             numberOfCards: 5, // Starting off with 5 cards
-            colors: [
-                { HEX: "#a4e6b7", RGB: "164 230 183" },
-                { HEX: "#6e34f2", RGB: "110 52 242" },
-                { HEX: "#edce03", RGB: "237 206 3" },
-                { HEX: "#392117", RGB: "57 33 23" },
-                { HEX: "#705c4e", RGB: "112 92 78" },
-            ],
+            colors: [],
         };
     },
-    provide() {
-        return {
-            colors: this.colors,
-        };
+    methods: {
+        getOneColor(hexValue) {
+            console.log(hexValue);
+            fetch(SINGLE_COLOR_URL)
+                .then((response) => {
+                    if (response.ok) return response.json();
+                })
+                .then((data) => {
+                    const foundColor = this.colors.find(
+                        (color) => color.HEX === hexValue
+                    );
+                    
+                    foundColor.HEX = data[0].HEX;
+                    foundColor.RGB = data[0].RGB;
+                });
+        },
+        getMultipleColors() {
+            fetch(MULTI_COLOR_URL + this.numberOfCards)
+                .then((response) => {
+                    if (response.ok) return response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                    this.colors = data;
+                });
+        },
+    },
+    mounted() {
+        console.log(this.getMultipleColors());
     },
 };
 </script>

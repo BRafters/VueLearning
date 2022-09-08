@@ -1,5 +1,5 @@
 <template>
-    <div class="color-card" :style="{ backgroundColor: hexValue }">
+    <div class="color-card" :style="{ backgroundColor: hexValue }" @click="generateNewColor">
         <div class="card-info">
             <h3>HEX: {{ hexValue }}</h3>
             <h4>RGB: {{ rgbValue }}</h4>
@@ -9,6 +9,7 @@
 
 <script>
 export default {
+    emits: ['new-color'],
     props: {
         rgbValue: {
             type: String,
@@ -19,6 +20,11 @@ export default {
             required: true,
         },
     },
+    methods: {
+        generateNewColor(){
+            this.$emit('new-color', this.hexValue);
+        }
+    }
 };
 </script>
 
